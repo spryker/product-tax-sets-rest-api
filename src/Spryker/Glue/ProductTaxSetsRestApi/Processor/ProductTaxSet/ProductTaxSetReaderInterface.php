@@ -5,13 +5,13 @@
  * Use of this software requires acceptance of the Evaluation License Agreement. See LICENSE file.
  */
 
-namespace Spryker\Glue\ProductTaxSetsRestApi\Processor\TaxSets;
+namespace Spryker\Glue\ProductTaxSetsRestApi\Processor\ProductTaxSet;
 
 use Spryker\Glue\GlueApplication\Rest\JsonApi\RestResourceInterface;
 use Spryker\Glue\GlueApplication\Rest\JsonApi\RestResponseInterface;
 use Spryker\Glue\GlueApplication\Rest\Request\Data\RestRequestInterface;
 
-interface ProductTaxSetsReaderInterface
+interface ProductTaxSetReaderInterface
 {
     /**
      * @param \Spryker\Glue\GlueApplication\Rest\Request\Data\RestRequestInterface $restRequest
@@ -21,10 +21,13 @@ interface ProductTaxSetsReaderInterface
     public function getTaxSets(RestRequestInterface $restRequest): RestResponseInterface;
 
     /**
-     * @param string $abstractProductSku
+     * @param string $productAbstractSku
      * @param \Spryker\Glue\GlueApplication\Rest\Request\Data\RestRequestInterface $restRequest
      *
      * @return \Spryker\Glue\GlueApplication\Rest\JsonApi\RestResourceInterface|null
      */
-    public function findAbstractProductTaxSetsByAbstractProductSku(string $abstractProductSku, RestRequestInterface $restRequest): ?RestResourceInterface;
+    public function findProductAbstractTaxSetsByProductAbstractSku(
+        string $productAbstractSku,
+        RestRequestInterface $restRequest
+    ): ?RestResourceInterface;
 }
