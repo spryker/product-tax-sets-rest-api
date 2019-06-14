@@ -5,14 +5,13 @@
  * Use of this software requires acceptance of the Evaluation License Agreement. See LICENSE file.
  */
 
-namespace Spryker\Glue\ProductTaxSetsRestApi\Plugin;
+namespace Spryker\Glue\ProductTaxSetsRestApi\Plugin\GlueApplication;
 
 use Generated\Shared\Transfer\RestProductTaxSetsAttributesTransfer;
 use Spryker\Glue\GlueApplicationExtension\Dependency\Plugin\ResourceRouteCollectionInterface;
 use Spryker\Glue\GlueApplicationExtension\Dependency\Plugin\ResourceRoutePluginInterface;
 use Spryker\Glue\GlueApplicationExtension\Dependency\Plugin\ResourceWithParentPluginInterface;
 use Spryker\Glue\Kernel\AbstractPlugin;
-use Spryker\Glue\ProductsRestApi\ProductsRestApiConfig;
 use Spryker\Glue\ProductTaxSetsRestApi\ProductTaxSetsRestApiConfig;
 
 /**
@@ -46,7 +45,7 @@ class ProductTaxSetsResourceRoutePlugin extends AbstractPlugin implements Resour
      */
     public function getResourceType(): string
     {
-        return ProductTaxSetsRestApiConfig::RESOURCE_TAX_SETS;
+        return ProductTaxSetsRestApiConfig::RESOURCE_PRODUCT_TAX_SETS;
     }
 
     /**
@@ -82,6 +81,6 @@ class ProductTaxSetsResourceRoutePlugin extends AbstractPlugin implements Resour
      */
     public function getParentResourceType(): string
     {
-        return ProductsRestApiConfig::RESOURCE_ABSTRACT_PRODUCTS;
+        return ProductTaxSetsRestApiConfig::RESOURCE_ABSTRACT_PRODUCTS;
     }
 }
