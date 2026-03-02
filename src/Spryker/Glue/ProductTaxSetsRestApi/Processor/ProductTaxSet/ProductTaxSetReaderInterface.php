@@ -13,19 +13,8 @@ use Spryker\Glue\GlueApplication\Rest\Request\Data\RestRequestInterface;
 
 interface ProductTaxSetReaderInterface
 {
-    /**
-     * @param \Spryker\Glue\GlueApplication\Rest\Request\Data\RestRequestInterface $restRequest
-     *
-     * @return \Spryker\Glue\GlueApplication\Rest\JsonApi\RestResponseInterface
-     */
     public function getTaxSets(RestRequestInterface $restRequest): RestResponseInterface;
 
-    /**
-     * @param string $productAbstractSku
-     * @param \Spryker\Glue\GlueApplication\Rest\Request\Data\RestRequestInterface $restRequest
-     *
-     * @return \Spryker\Glue\GlueApplication\Rest\JsonApi\RestResourceInterface|null
-     */
     public function findProductAbstractTaxSetsByProductAbstractSku(
         string $productAbstractSku,
         RestRequestInterface $restRequest

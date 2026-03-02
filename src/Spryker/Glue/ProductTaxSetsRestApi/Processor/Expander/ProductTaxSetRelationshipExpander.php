@@ -17,9 +17,6 @@ class ProductTaxSetRelationshipExpander implements ProductTaxSetRelationshipExpa
      */
     protected $productTaxSetReader;
 
-    /**
-     * @param \Spryker\Glue\ProductTaxSetsRestApi\Processor\ProductTaxSet\ProductTaxSetReaderInterface $productTaxSetReader
-     */
     public function __construct(ProductTaxSetReaderInterface $productTaxSetReader)
     {
         $this->productTaxSetReader = $productTaxSetReader;

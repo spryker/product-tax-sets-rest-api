@@ -42,12 +42,6 @@ class ProductTaxSetReader implements ProductTaxSetReaderInterface
      */
     protected $productTaxSetsResourceMapper;
 
-    /**
-     * @param \Spryker\Glue\ProductTaxSetsRestApi\Dependency\Client\ProductTaxSetsRestApiToTaxProductStorageClientInterface $taxProductStorageClient
-     * @param \Spryker\Glue\ProductTaxSetsRestApi\Dependency\Client\ProductTaxSetsRestApiToTaxStorageClientInterface $taxStorageClient
-     * @param \Spryker\Glue\GlueApplication\Rest\JsonApi\RestResourceBuilderInterface $restResourceBuilder
-     * @param \Spryker\Glue\ProductTaxSetsRestApi\Processor\Mapper\ProductTaxSetResourceMapperInterface $productTaxSetsResourceMapper
-     */
     public function __construct(
         ProductTaxSetsRestApiToTaxProductStorageClientInterface $taxProductStorageClient,
         ProductTaxSetsRestApiToTaxStorageClientInterface $taxStorageClient,
@@ -60,11 +54,6 @@ class ProductTaxSetReader implements ProductTaxSetReaderInterface
         $this->productTaxSetsResourceMapper = $productTaxSetsResourceMapper;
     }
 
-    /**
-     * @param \Spryker\Glue\GlueApplication\Rest\Request\Data\RestRequestInterface $restRequest
-     *
-     * @return \Spryker\Glue\GlueApplication\Rest\JsonApi\RestResponseInterface
-     */
     public function getTaxSets(RestRequestInterface $restRequest): RestResponseInterface
     {
         $restResponse = $this->restResourceBuilder->createRestResponse();
@@ -82,12 +71,6 @@ class ProductTaxSetReader implements ProductTaxSetReaderInterface
         return $restResponse->addResource($restResource);
     }
 
-    /**
-     * @param string $productAbstractSku
-     * @param \Spryker\Glue\GlueApplication\Rest\Request\Data\RestRequestInterface $restRequest
-     *
-     * @return \Spryker\Glue\GlueApplication\Rest\JsonApi\RestResourceInterface|null
-     */
     public function findProductAbstractTaxSetsByProductAbstractSku(
         string $productAbstractSku,
         RestRequestInterface $restRequest
@@ -110,13 +93,6 @@ class ProductTaxSetReader implements ProductTaxSetReaderInterface
         return $this->formatRestResource($restProductTaxSetsAttributesTransfer, $taxStorageTransfer->getUuid(), $productAbstractSku);
     }
 
-    /**
-     * @param \Generated\Shared\Transfer\RestProductTaxSetsAttributesTransfer $restTaxSetsAttributesTransfer
-     * @param string $uuid
-     * @param string $parentResourceId
-     *
-     * @return \Spryker\Glue\GlueApplication\Rest\JsonApi\RestResourceInterface
-     */
     protected function formatRestResource(
         RestProductTaxSetsAttributesTransfer $restTaxSetsAttributesTransfer,
         string $uuid,
@@ -140,9 +116,6 @@ class ProductTaxSetReader implements ProductTaxSetReaderInterface
         return $restResource;
     }
 
-    /**
-     * @return \Spryker\Glue\GlueApplication\Rest\JsonApi\RestResponseInterface
-     */
     protected function createProductAbstractNotFoundError(): RestResponseInterface
     {
         $restResponse = $this->restResourceBuilder->createRestResponse();
@@ -155,9 +128,6 @@ class ProductTaxSetReader implements ProductTaxSetReaderInterface
         return $restResponse->addError($errorTransfer);
     }
 
-    /**
-     * @return \Spryker\Glue\GlueApplication\Rest\JsonApi\RestResponseInterface
-     */
     protected function createProductTaxSetNotFoundError(): RestResponseInterface
     {
         $restResponse = $this->restResourceBuilder->createRestResponse();

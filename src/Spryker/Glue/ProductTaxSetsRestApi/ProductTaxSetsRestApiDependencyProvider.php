@@ -27,11 +27,6 @@ class ProductTaxSetsRestApiDependencyProvider extends AbstractBundleDependencyPr
      */
     public const CLIENT_TAX_STORAGE = 'CLIENT_TAX_STORAGE';
 
-    /**
-     * @param \Spryker\Glue\Kernel\Container $container
-     *
-     * @return \Spryker\Glue\Kernel\Container
-     */
     public function provideDependencies(Container $container): Container
     {
         $container = parent::provideDependencies($container);
@@ -41,11 +36,6 @@ class ProductTaxSetsRestApiDependencyProvider extends AbstractBundleDependencyPr
         return $container;
     }
 
-    /**
-     * @param \Spryker\Glue\Kernel\Container $container
-     *
-     * @return \Spryker\Glue\Kernel\Container
-     */
     protected function addTaxProductStorageClient(Container $container): Container
     {
         $container->set(static::CLIENT_TAX_PRODUCT_STORAGE, function (Container $container) {
@@ -57,11 +47,6 @@ class ProductTaxSetsRestApiDependencyProvider extends AbstractBundleDependencyPr
         return $container;
     }
 
-    /**
-     * @param \Spryker\Glue\Kernel\Container $container
-     *
-     * @return \Spryker\Glue\Kernel\Container
-     */
     protected function addTaxStorageClient(Container $container): Container
     {
         $container->set(static::CLIENT_TAX_STORAGE, function (Container $container) {

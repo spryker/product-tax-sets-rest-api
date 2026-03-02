@@ -13,12 +13,6 @@ use Generated\Shared\Transfer\TaxSetStorageTransfer;
 
 class ProductTaxSetResourceMapper implements ProductTaxSetResourceMapperInterface
 {
-    /**
-     * @param \Generated\Shared\Transfer\TaxSetStorageTransfer $taxSetStorageTransfer
-     * @param \Generated\Shared\Transfer\RestProductTaxSetsAttributesTransfer $restProductTaxSetsAttributesTransfer
-     *
-     * @return \Generated\Shared\Transfer\RestProductTaxSetsAttributesTransfer
-     */
     public function mapTaxSetStorageTransferToRestProductTaxSetsAttributesTransfer(
         TaxSetStorageTransfer $taxSetStorageTransfer,
         RestProductTaxSetsAttributesTransfer $restProductTaxSetsAttributesTransfer

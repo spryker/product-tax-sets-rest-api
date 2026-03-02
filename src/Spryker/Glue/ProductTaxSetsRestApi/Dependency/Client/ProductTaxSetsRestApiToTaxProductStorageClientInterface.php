@@ -11,10 +11,5 @@ use Generated\Shared\Transfer\TaxProductStorageTransfer;
 
 interface ProductTaxSetsRestApiToTaxProductStorageClientInterface
 {
-    /**
-     * @param string $productAbstractSku
-     *
-     * @return \Generated\Shared\Transfer\TaxProductStorageTransfer|null
-     */
     public function findTaxProductStorageByProductAbstractSku(string $productAbstractSku): ?TaxProductStorageTransfer;
 }
