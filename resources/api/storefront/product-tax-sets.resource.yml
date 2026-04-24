@@ -1,0 +1,58 @@
+resource:
+    name: ProductTaxSets
+    shortName: product-tax-sets
+    description: 'Storefront tax set for abstract products'
+
+    provider: Spryker\Glue\ProductTaxSetsRestApi\Api\Storefront\Provider\ProductTaxSetsStorefrontProvider
+
+    paginationEnabled: false
+
+    operations:
+        - type: GetCollection
+          uriTemplate: /abstract-products/{abstractProductSku}/product-tax-sets
+          description: 'Retrieve tax set of an abstract product'
+          uriVariables:
+              abstractProductSku:
+                  fromClass: AbstractProductsStorefrontResource
+
+        - type: GetCollection
+          name: getProductTaxSetsFallbackMissingSku
+          uriTemplate: '/abstract-products/product-tax-sets'
+          description: 'Backward compatibility — returns 404 when abstract product SKU is missing'
+
+    includableIn:
+        - resource: AbstractProducts
+          relationshipName: product-tax-sets
+          uriVariableMappings:
+              sku: abstractProductSku
+
+    properties:
+        uuid:
+            type: string
+            identifier: true
+            writable: false
+            readable: true
+            description: 'Tax set UUID'
+            openapiContext:
+                example: 'a1b2c3d4-0000-5000-a000-000000000001'
+
+        name:
+            type: string
+            writable: false
+            readable: true
+            required: false
+            description: 'Tax set name'
+            openapiContext:
+                example: 'Electronics'
+
+        restTaxRates:
+            type: array
+            writable: false
+            readable: true
+            required: false
+            description: 'Collection of applicable tax rates. Retained under the `restTaxRates` key for backward compatibility with the legacy REST API response (RestProductTaxSetsAttributesTransfer).'
+            openapiContext:
+                example:
+                    - name: 'Germany Standard'
+                      rate: '19.00'
+                      country: 'DE'

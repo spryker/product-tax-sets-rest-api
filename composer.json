@@ -15,9 +15,11 @@
         "spryker/uuid-behavior": "^1.0.0"
     },
     "require-dev": {
+        "spryker/api-platform": "*",
         "spryker/code-sniffer": "*"
     },
     "suggest": {
+        "spryker/api-platform": "Required to expose API Platform resources.",
         "spryker/uuid": "If you want to generate UUIDs for existing entities."
     },
     "autoload": {
