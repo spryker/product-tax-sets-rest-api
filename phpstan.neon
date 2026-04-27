@@ -1,5 +1,12 @@
 parameters:
     level: 7
+    reportUnmatchedIgnoredErrors: false
     ignoreErrors:
         -
             identifier: phpDoc.parseError
+#        API Platform Generated resource classes are intentionally excluded from generation
+#        (see config/GlueStorefront/packages/spryker_api_platform.php).
+        - '#invalid type Generated\\Api\\Storefront\\ProductTaxSetsStorefrontResource\.#'
+        - '#invalid return type Generated\\Api\\Storefront\\ProductTaxSetsStorefrontResource\.#'
+        - '#unknown class Generated\\Api\\Storefront\\ProductTaxSetsStorefrontResource\.#'
+        - '#Instantiated class Generated\\Api\\Storefront\\ProductTaxSetsStorefrontResource not found\.#'
