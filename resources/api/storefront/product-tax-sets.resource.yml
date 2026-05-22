@@ -20,12 +20,6 @@ resource:
           uriTemplate: '/abstract-products/product-tax-sets'
           description: 'Backward compatibility — returns 404 when abstract product SKU is missing'
 
-    includableIn:
-        - resource: AbstractProducts
-          relationshipName: product-tax-sets
-          uriVariableMappings:
-              sku: abstractProductSku
-
     properties:
         uuid:
             type: string
