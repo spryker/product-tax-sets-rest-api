@@ -9,22 +9,44 @@ declare(strict_types=1);
 
 namespace Spryker\Glue\ProductTaxSetsRestApi\Api\Storefront\Provider;
 
+use ApiPlatform\Metadata\Operation;
 use Generated\Api\Storefront\ProductTaxSetsStorefrontResource;
+use Generated\Shared\Transfer\TaxProductStorageTransfer;
+use Generated\Shared\Transfer\TaxSetStorageTransfer;
 use Spryker\ApiPlatform\Exception\GlueApiException;
+use Spryker\ApiPlatform\Provider\BatchLoadableProviderInterface;
 use Spryker\ApiPlatform\State\Provider\AbstractStorefrontProvider;
 use Spryker\Client\TaxProductStorage\TaxProductStorageClientInterface;
 use Spryker\Client\TaxStorage\TaxStorageClientInterface;
 use Spryker\Glue\ProductTaxSetsRestApi\ProductTaxSetsRestApiConfig;
+use Spryker\Service\Serializer\SerializerServiceInterface;
 use Symfony\Component\HttpFoundation\Response;
 
-class ProductTaxSetsStorefrontProvider extends AbstractStorefrontProvider
+/**
+ * @implements \Spryker\ApiPlatform\Provider\BatchLoadableProviderInterface<\Generated\Api\Storefront\ProductTaxSetsStorefrontResource>
+ */
+class ProductTaxSetsStorefrontProvider extends AbstractStorefrontProvider implements BatchLoadableProviderInterface
 {
     protected const string URI_VAR_SKU = 'abstractProductSku';
 
     public function __construct(
         protected TaxProductStorageClientInterface $taxProductStorageClient,
         protected TaxStorageClientInterface $taxStorageClient,
+        protected SerializerServiceInterface $serializer,
     ) {
+    }
+
+    /**
+     * @param array<string, mixed> $uriVariables
+     * @param array<string, mixed> $context
+     */
+    public function provide(Operation $operation, array $uriVariables = [], array $context = []): object|array|null
+    {
+        if (isset($uriVariables[static::BATCH_DATA_KEY]) && is_array($uriVariables[static::BATCH_DATA_KEY])) {
+            return $this->provideBatch($uriVariables[static::BATCH_DATA_KEY]);
+        }
+
+        return parent::provide($operation, $uriVariables, $context);
     }
 
     /**
@@ -46,7 +68,56 @@ class ProductTaxSetsStorefrontProvider extends AbstractStorefrontProvider
             $this->throwTaxSetsNotFound();
         }
 
+        return [$this->buildResource($taxSetStorage)];
+    }
+
+    /**
+     * @param array<array<string, mixed>> $batchUriVariables
+     *
+     * @return array<\Generated\Api\Storefront\ProductTaxSetsStorefrontResource>
+     */
+    protected function provideBatch(array $batchUriVariables): array
+    {
+        $productAbstractSkus = [];
+
+        foreach ($batchUriVariables as $itemUriVariables) {
+            $productAbstractSku = $itemUriVariables[static::URI_VAR_SKU] ?? '';
+
+            if ($productAbstractSku !== '') {
+                $productAbstractSkus[] = $productAbstractSku;
+            }
+        }
+
+        if ($productAbstractSkus === []) {
+            return [];
+        }
+
+        $taxProductStorages = $this->taxProductStorageClient->getTaxProductStoragesByProductAbstractSkus($productAbstractSkus);
+
+        $idTaxSets = array_unique(array_map(
+            fn (TaxProductStorageTransfer $taxProductStorage) => $taxProductStorage->getIdTaxSet(),
+            $taxProductStorages,
+        ));
+
+        if ($idTaxSets === []) {
+            return [];
+        }
+
+        $taxSetStorages = $this->taxStorageClient->getTaxSetStoragesByIdTaxSets($idTaxSets);
+
+        $resources = [];
+
+        foreach ($taxSetStorages as $taxSetStorage) {
+            $resources[] = $this->buildResource($taxSetStorage);
+        }
+
+        return $resources;
+    }
+
+    protected function buildResource(TaxSetStorageTransfer $taxSetStorage): ProductTaxSetsStorefrontResource
+    {
         $taxRates = [];
+
         foreach ($taxSetStorage->getTaxRates() as $taxRate) {
             $taxRates[] = [
                 'name' => $taxRate->getName(),
@@ -55,12 +126,14 @@ class ProductTaxSetsStorefrontProvider extends AbstractStorefrontProvider
             ];
         }
 
-        $resource = new ProductTaxSetsStorefrontResource();
-        $resource->uuid = $taxSetStorage->getUuid();
-        $resource->name = $taxSetStorage->getName();
-        $resource->restTaxRates = $taxRates;
-
-        return [$resource];
+        return $this->serializer->denormalize(
+            [
+                'uuid' => $taxSetStorage->getUuid(),
+                'name' => $taxSetStorage->getName(),
+                'restTaxRates' => $taxRates,
+            ],
+            ProductTaxSetsStorefrontResource::class,
+        );
     }
 
     protected function resolveAbstractProductSku(): string
