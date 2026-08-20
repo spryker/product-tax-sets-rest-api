@@ -14,11 +14,17 @@ resource:
           uriVariables:
               abstractProductSku:
                   fromClass: AbstractProductsStorefrontResource
+          openapiContext:
+              responses:
+                  200:
+                      description: 'Tax set of the abstract product returned.'
+                  404:
+                      description: 'No tax set exists for the given abstract product SKU.'
 
-        - type: GetCollection
-          name: getProductTaxSetsFallbackMissingSku
-          uriTemplate: '/abstract-products/product-tax-sets'
-          description: 'Backward compatibility — returns 404 when abstract product SKU is missing'
+        # No SKU-less fallback route here, unlike the sibling product sub-resources: it would be
+        # `/abstract-products/product-tax-sets`, which the abstract-product item route matches
+        # first — routes are registered in resource-class order, and AbstractProducts sorts before
+        # ProductTaxSets. The URL still answers the same legacy 404, just from the other resource.
 
     properties:
         uuid:
