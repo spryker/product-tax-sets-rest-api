@@ -14,6 +14,9 @@ resource:
           uriVariables:
               abstractProductSku:
                   fromClass: AbstractProductsStorefrontResource
+          extraProperties:
+              notFoundCode: '310'
+              notFoundMessage: 'Product tax sets not found.'
           openapiContext:
               responses:
                   200:
