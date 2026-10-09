@@ -58,11 +58,13 @@ class ProductTaxSetsStorefrontProvider extends AbstractStorefrontProvider implem
 
         $taxProductStorage = $this->taxProductStorageClient->findTaxProductStorageByProductAbstractSku($sku);
 
-        if ($taxProductStorage === null) {
+        $idTaxSet = $taxProductStorage?->getIdTaxSet();
+
+        if ($idTaxSet === null) {
             $this->throwTaxSetsNotFound();
         }
 
-        $taxSetStorage = $this->taxStorageClient->findTaxSetStorageByIdTaxSet($taxProductStorage->getIdTaxSet());
+        $taxSetStorage = $this->taxStorageClient->findTaxSetStorageByIdTaxSet($idTaxSet);
 
         if ($taxSetStorage === null) {
             $this->throwTaxSetsNotFound();
@@ -94,10 +96,10 @@ class ProductTaxSetsStorefrontProvider extends AbstractStorefrontProvider implem
 
         $taxProductStorages = $this->taxProductStorageClient->getTaxProductStoragesByProductAbstractSkus($productAbstractSkus);
 
-        $idTaxSets = array_unique(array_map(
-            fn (TaxProductStorageTransfer $taxProductStorage) => $taxProductStorage->getIdTaxSet(),
+        $idTaxSets = array_unique(array_filter(array_map(
+            fn (TaxProductStorageTransfer $taxProductStorage): ?int => $taxProductStorage->getIdTaxSet(),
             $taxProductStorages,
-        ));
+        ), fn (?int $idTaxSet): bool => $idTaxSet !== null));
 
         if ($idTaxSets === []) {
             return [];
